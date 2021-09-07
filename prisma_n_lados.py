@@ -49,9 +49,7 @@ def figure():
     GL.glRotatef(alpha, 0.0, 0.0, 1.0)  # X axis
     GL.glRotatef(beta, 0.0, 1.0, 0.0)  # Y axis
 
-    # desenho
-
-    # em baixo
+    # figura de baixo
     GL.glColor3fv(cores_cima_baixo)
     GL.glBegin(GL.GL_POLYGON)
     for i in range(vertices):
@@ -61,13 +59,13 @@ def figure():
         GL.glVertex3f(x, y, 0.0)
     GL.glEnd()
 
-    # em cima
+    # figura de cima
     GL.glBegin(GL.GL_POLYGON)
     for x, y in vertices_poligonos:
         GL.glVertex3f(piramid_modifier*x, piramid_modifier*y, altura_prisma)
     GL.glEnd()
 
-    # lados
+    # outros lados
     GL.glBegin(GL.GL_QUADS)
     for i in range(vertices):
         GL.glColor3fv(cores[i % 3])
@@ -115,14 +113,14 @@ def key_pressed(key, x, y):
     if key == b"\033":
         GLUT.glutLeaveMainLoop()
 
-    # Toggles Piramid
+    # piramide
     elif key == b"p":
         if piramid_modifier == 1:
             piramid_modifier = 0.5
         else:
             piramid_modifier = 1
 
-    # Toggles Rotation
+    # rotacao
     elif key == b" ":
         if delta_alpha == 0:
             delta_alpha = 0.5
@@ -140,13 +138,13 @@ def mouse_click(button, state, x, y):
     botao_esquerdo = button == GLUT.GLUT_LEFT_BUTTON and state == GLUT.GLUT_DOWN
     botao_direito = button == GLUT.GLUT_RIGHT_BUTTON and state == GLUT.GLUT_DOWN
 
-    # Zoom
+    # zoom
     if button == 3 and state == GLUT.GLUT_DOWN:
         delta_y += 1
     elif button == 4 and state == GLUT.GLUT_DOWN:
         delta_y -= 1
 
-    # Toggles Piramid
+    # piramide
     elif button == GLUT.GLUT_MIDDLE_BUTTON and state == GLUT.GLUT_DOWN:
         if piramid_modifier == 1:
             piramid_modifier = 0.5
@@ -159,10 +157,10 @@ def mouse_click(button, state, x, y):
 def mouse_move(x, y):
     global alpha, beta, down_x, down_y, delta_x, delta_y, delta_alpha
 
-    # Rotate
+    # girando
     if botao_esquerdo:
         delta_alpha = 0
-        # Alpha calculations and bounds
+        # alpha
         alpha -= ((x - down_x) / 4.0) * -1
 
         if alpha >= 360:
@@ -171,7 +169,7 @@ def mouse_move(x, y):
         if alpha <= 0:
             alpha += 360
 
-        # Beta calculations and bounds
+        # beta
         if alpha >= 180:
             beta += (y - down_y) / 4.0 * -1
         else:
@@ -183,7 +181,7 @@ def mouse_move(x, y):
         if beta <= 0:
             beta += 360
 
-    # Translate
+    # virando
     if botao_direito:
         delta_x += -1 * (x - down_x) / 100.0
         delta_y += (y - down_y) / 100.0
@@ -198,7 +196,7 @@ def main():
         GLUT.GLUT_DOUBLE | GLUT.GLUT_RGBA | GLUT.GLUT_DEPTH | GLUT.GLUT_MULTISAMPLE
     )
 
-    # Creating a screen with good resolution proportions
+    # formatando a tela
     screen_width = GLUT.glutGet(GLUT.GLUT_SCREEN_WIDTH)
     screen_height = GLUT.glutGet(GLUT.GLUT_SCREEN_HEIGHT)
 
@@ -212,7 +210,7 @@ def main():
     )
     GLUT.glutCreateWindow(titulo_tela)
     GLUT.glutDisplayFunc(draw)
-    # Input Functions
+    # funcoes acessorias
     GLUT.glutSpecialFunc(special_key_pressed)
     GLUT.glutKeyboardFunc(key_pressed)
     GLUT.glutMouseFunc(mouse_click)
@@ -220,7 +218,7 @@ def main():
     # GL.glEnable(GL.GL_MULTISAMPLE)
     GL.glEnable(GL.GL_DEPTH_TEST)
     GL.glClearColor(*cor_fundo)
-    # Pre-render camera positioning
+    # posicionando a camera
     GLU.gluPerspective(-45, window_width / window_height, 0.1, 100.0)
     GLUT.glutTimerFunc(10, timer, 1)
     GLUT.glutMainLoop()
